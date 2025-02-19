@@ -1,0 +1,48 @@
+plugins {
+    id "com.android.application"
+    id "com.google.gms.google-services" // Firebase plugin
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace = "com.example.esteshara"
+    compileSdk = 34 // Latest stable version
+
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.example.esteshara"
+        minSdk = 23 // Minimum SDK version for Firebase
+        targetSdk = 34 // Latest stable version
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        multiDexEnabled = true // Enable multidex for Firebase
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.debug // Update this for release builds
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:32.5.0') // Firebase BoM
+    implementation 'com.google.firebase:firebase-analytics' // Firebase Analytics
+    implementation 'com.google.firebase:firebase-firestore' // Cloud Firestore
+    implementation 'androidx.multidex:multidex:2.0.1' // Multidex support
+}

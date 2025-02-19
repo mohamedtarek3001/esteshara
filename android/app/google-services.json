@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "763019627626",
+    "project_id": "estsharti-f4f06",
+    "storage_bucket": "estsharti-f4f06.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763019627626:android:15f570ea5c577826b44e13",
+        "android_client_info": {
+          "package_name": "com.example.esteshara"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwid5nxyxcD8JFDtC8mqE9ymPBjS86-7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
