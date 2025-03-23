@@ -17,7 +17,7 @@ class AIChatScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: StreamBuilder<List<ChatMessage>>(
+            child: StreamBuilder<List<AIChatMessage>>(
               stream: context.read<AiCubit>().getChatStream(),
               builder: (context, snapshot) {
                 var messages = snapshot.data ?? [];
@@ -63,12 +63,12 @@ class AIChatScreen extends StatelessWidget {
         },
       ),
       actions: [
-        IconButton(
+        Navigator.canPop(context)?IconButton(
           onPressed: () {
             Navigator.canPop(context) ? Navigator.pop(context) : null;
           },
           icon: const Icon(Icons.arrow_forward, color: Colors.white),
-        ),
+        ):Container(),
       ],
     );
   }
@@ -152,7 +152,7 @@ class _TypingBubbleState extends State<TypingBubble> with SingleTickerProviderSt
 }
 
 class ChatBubble extends StatelessWidget {
-  final ChatMessage message;
+  final AIChatMessage message;
 
   const ChatBubble({super.key, required this.message});
 

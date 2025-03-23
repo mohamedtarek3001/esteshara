@@ -18,7 +18,7 @@ class AiCubit extends Cubit<AiState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController questionController = TextEditingController();
 
-  List<ChatMessage> chatMessages = [];
+  List<AIChatMessage> chatMessages = [];
   AiResponseModel? aiResponse;
 
   bool isLoading = false;
@@ -34,7 +34,7 @@ class AiCubit extends Cubit<AiState> {
   }
 
 
-  Stream<List<ChatMessage>> getChatStream() {
+  Stream<List<AIChatMessage>> getChatStream() {
     String userId = _firebaseAuth.currentUser?.uid ?? "guest";
     return _firestore
         .collection("chats")
@@ -43,7 +43,7 @@ class AiCubit extends Cubit<AiState> {
         .orderBy("timestamp", descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => ChatMessage.fromJson(doc.data()))
+        .map((doc) => AIChatMessage.fromJson(doc.data()))
         .toList());
   }
 
@@ -54,7 +54,7 @@ class AiCubit extends Cubit<AiState> {
     setIsLoadingTrue();
 
     // Store User Message
-    ChatMessage userMessage = ChatMessage(
+    AIChatMessage userMessage = AIChatMessage(
       text: question,
       isUser: true,
       timestamp: DateTime.now(),
@@ -79,7 +79,7 @@ class AiCubit extends Cubit<AiState> {
         aiResponse = AiResponseModel.fromJson(responseData);
 
         // Store AI Response
-        ChatMessage aiMessage = ChatMessage(
+        AIChatMessage aiMessage = AIChatMessage(
           text: aiResponse?.answer ?? "No response",
           isUser: false,
           timestamp: DateTime.now(),
@@ -97,7 +97,7 @@ class AiCubit extends Cubit<AiState> {
   }
 
   /// **2️⃣ Save Messages to Firestore**
-  Future<void> _saveMessageToFirestore(ChatMessage message) async {
+  Future<void> _saveMessageToFirestore(AIChatMessage message) async {
     String userId = _firebaseAuth.currentUser?.uid ?? "guest";
     await _firestore.collection("chats").doc(userId).collection("messages").add(message.toJson());
   }

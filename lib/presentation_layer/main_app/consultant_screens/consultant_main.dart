@@ -1,12 +1,27 @@
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
+import 'package:esteshara/business_logic/auth_cubit.dart';
 import 'package:esteshara/core/constants/constants.dart';
 import 'package:esteshara/presentation_layer/main_app/consultant_screens/consultant_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../generated/assets.dart';
 
-class ConsultantMain extends StatelessWidget {
+class ConsultantMain extends StatefulWidget {
   const ConsultantMain({super.key});
+
+  @override
+  State<ConsultantMain> createState() => _ConsultantMainState();
+}
+
+class _ConsultantMainState extends State<ConsultantMain> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    BlocProvider.of<AuthCubit>(context).getUsers('user',true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +51,7 @@ class ConsultantMain extends StatelessWidget {
                     ),
                     const Text(
                       "Book a consultation with our experts to get personalized"
-                      " guidance to achieve your digital goals efficiently.",
+                          " guidance to achieve your digital goals efficiently.",
                       style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xff2DACC9), fontSize: 12),
                       textAlign: TextAlign.center,
                     )
@@ -64,15 +79,26 @@ class ConsultantMain extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      AutoHeightGridView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        builder: (context, index) {
-                          return InkWell(onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ConsultantDetails(),));
-                          },child: const ConsultantTile());
+                      BlocBuilder<AuthCubit, AuthState>(
+                        builder: (context, state) {
+                          if(context.read<AuthCubit>().isLoading){
+                            return const Center(child: CircularProgressIndicator(),);
+                          }
+                          var users = context.read<AuthCubit>().filteredUsers;
+                          print(users);
+                          return AutoHeightGridView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            builder: (context, index) {
+                              return users?[index].userType != "user"? InkWell(
+                                  onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ConsultantDetails(consultant: users?[index],),));
+                              }, child: ConsultantTile(name: users?[index].name.toString()??'',major: users?[index].major.toString()??'',rate: users?[index].rate ?? 0,)):
+                              Container();
+                            },
+                            itemCount: users?.length??0,
+                          );
                         },
-                        itemCount: 10,
                       ),
                     ],
                   ),
@@ -87,7 +113,10 @@ class ConsultantMain extends StatelessWidget {
 }
 
 class ConsultantTile extends StatelessWidget {
-  const ConsultantTile({super.key});
+  const ConsultantTile({super.key,required this.name,required this.major,required this.rate});
+  final String name;
+  final String major;
+  final double rate;
 
   @override
   Widget build(BuildContext context) {
@@ -108,15 +137,15 @@ class ConsultantTile extends StatelessWidget {
               width: 2,
             ),
           ),
-          child: Column(
+          child:  Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(
                 height: 35,
               ),
-              const Text(
-                'khaled',
-                style: TextStyle(
+              Text(
+                '${name}',
+                style: const TextStyle(
                   color: Color(0xff2DACC9),
                   fontSize: 17,
                   fontWeight: FontWeight.w800,
@@ -125,12 +154,12 @@ class ConsultantTile extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              const Center(
+              Center(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Major:',
                       style: TextStyle(
                         color: Color(0xff2DACC9),
@@ -139,8 +168,8 @@ class ConsultantTile extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      ' Hardware',
-                      style: TextStyle(
+                      ' ${major}',
+                      style: const TextStyle(
                         color: Color(0xff2DACC9),
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
@@ -181,18 +210,18 @@ class ConsultantTile extends StatelessWidget {
                     border: Border.all(
                       color: const Color(0xff2DACC9),
                     )),
-                child: const Center(
+                child:  Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.star,
                         size: 20,
                         color: Color(0xff2DACC9),
                       ),
                       Text(
-                        '4.5',
+                        rate.toString(),
                       ),
                     ],
                   ),

@@ -1,8 +1,11 @@
 import 'package:esteshara/business_logic/auth_cubit.dart';
+import 'package:esteshara/business_logic/chat_cubit.dart';
 import 'package:esteshara/core/constants/constants.dart';
+import 'package:esteshara/presentation_layer/admin_screens/admin_main_hub.dart';
 import 'package:esteshara/presentation_layer/auth_screens/create_account_screen.dart';
 import 'package:esteshara/presentation_layer/auth_screens/create_consultant_account.dart';
 import 'package:esteshara/presentation_layer/auth_screens/forget_password_screen.dart';
+import 'package:esteshara/presentation_layer/consultant_screens/consultant_main_hub.dart';
 import 'package:esteshara/presentation_layer/main_app/main_hub.dart';
 import 'package:esteshara/widgets/custom_main_buttons.dart';
 import 'package:esteshara/widgets/custom_password_form_field.dart';
@@ -167,9 +170,11 @@ class LoginScreen extends StatelessWidget {
                               return CustomPasswordFormField(
                                 title: 'Password',
                                 hint: 'Please enter your password',
-                                isVisible: false,
+                                isVisible: context.read<AuthCubit>().isVisible,
                                 controller: context.read<AuthCubit>().passwordController,
-                                onTap: () {},
+                                onTap: () {
+                                  context.read<AuthCubit>().togglePasswordVisibility();
+                                },
                               );
                             },
                           ),
@@ -201,13 +206,47 @@ class LoginScreen extends StatelessWidget {
                                           ),
                                     ontap: () async {
                                       var res = await context.read<AuthCubit>().signInWithEmail();
+                                      var isVerified = context.read<AuthCubit>().userData?.verified;
+                                      if(res == null && isVerified == false){
+                                        showCupertinoDialog(context: context, builder: (context) => CupertinoAlertDialog(
+                                            title: const Text('Failed',style: TextStyle(color: Colors.red,fontSize: 20),),
+                                            content: Column(
+                                              children: [
+                                                const Text('Please wait for verifing..',style: TextStyle(color: Colors.black,fontSize: 16)),
+                                                SizedBox(height: 10,),
+                                                const Text('Contanct us: estasherni@gmail.com',style: TextStyle(color: Colors.black,fontSize: 16)),
+                                              ],
+                                            ),
+                                            actions: [
+                                              CupertinoButton(child: const Text('OK'), onPressed: () {
+                                                Navigator.pop(context);
+                                              },)
+                                            ]
+                                        ),);
+                                      }else if (res == null && isVerified != false) {
+                                        if(context.read<AuthCubit>().userData?.userType == 'admin'){
+                                          await context.read<AuthCubit>().getUsers('user',true);
+                                          BlocProvider.of<ChatCubit>(context).getRooms();
+                                          Navigator.pushReplacement(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) => const AdminMainHub(),
+                                              ),);
+                                        }
+                                        else if(context.read<AuthCubit>().userData?.userType == 'user'){
+                                          Navigator.pushReplacement(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) => const MainHub(),
+                                              ),);
+                                        }else{
+                                          Navigator.pushReplacement(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) => const ConsultantMainHub(),
+                                              ),);
+                                        }
 
-                                      if (res == null) {
-                                        Navigator.pushReplacement(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) => const MainHub(),
-                                            ));
                                       }
                                     },
                                     color: Colors.blue[900],

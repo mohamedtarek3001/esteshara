@@ -1,4 +1,5 @@
 import 'package:esteshara/business_logic/auth_cubit.dart';
+import 'package:esteshara/business_logic/chat_cubit.dart';
 import 'package:esteshara/business_logic/page_control_cubit.dart';
 import 'package:esteshara/core/constants/constants.dart';
 import 'package:esteshara/presentation_layer/auth_screens/login_screen.dart';
@@ -27,6 +28,9 @@ void main() async {
         BlocProvider(
           create: (context) => PageControlCubit(),
         ),
+        BlocProvider(
+          create: (context) => ChatCubit(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -42,7 +46,7 @@ class MyApp extends StatelessWidget {
     ScreenSizing.initScreenSizing(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Estshrni',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue[900]!),
         useMaterial3: true,

@@ -12,17 +12,17 @@ class CustomTextFormField extends StatelessWidget {
     this.isEnabled,
     this.inputFormatters,
     this.keyboardType,
+    this.radius
   });
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final String title;
   final String hint;
+  final double? radius;
   final bool? isEnabled;
   final void Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
-
-
 
 
   @override
@@ -42,11 +42,11 @@ class CustomTextFormField extends StatelessWidget {
             label: title.isEmpty ? const Text('Email') : Text(title),
               labelStyle: const TextStyle(fontSize: 18,color: Colors.grey),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(radius??50),
                 borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(radius??50),
                 borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               contentPadding: const EdgeInsets.symmetric(
@@ -73,11 +73,13 @@ class CustomTextFormField3 extends StatelessWidget {
     this.isEnabled,
     this.inputFormatters,
     this.keyboardType,
+    this.radius
   });
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final String title;
   final String hint;
+  final double? radius;
   final bool? isEnabled;
   final void Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
@@ -103,15 +105,15 @@ class CustomTextFormField3 extends StatelessWidget {
             label: title.isEmpty ? const Text('Email') : Text(title),
               labelStyle: const TextStyle(fontSize: 18,color: Color(0xff2DACC9)),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(radius??50),
                 borderSide: const BorderSide(color: Color(0xff2DACC9)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(radius??50),
                 borderSide: const BorderSide(color: Color(0xff2DACC9)),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(radius??50),
                 borderSide: const BorderSide(color: Color(0xff2DACC9)),
               ),
               contentPadding: const EdgeInsets.symmetric(

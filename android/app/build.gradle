@@ -7,9 +7,9 @@ plugins {
 
 android {
     namespace = "com.example.esteshara"
-    compileSdk = 34 // Latest stable version
+    compileSdk = 35 // Latest stable version
 
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "29.0.13113456"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

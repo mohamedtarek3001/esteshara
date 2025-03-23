@@ -1,9 +1,9 @@
 import 'package:esteshara/business_logic/auth_cubit.dart';
 import 'package:esteshara/core/constants/constants.dart';
 import 'package:esteshara/generated/assets.dart';
-import 'package:esteshara/presentation_layer/main_app/main_hub.dart';
 import 'package:esteshara/widgets/custom_main_buttons.dart';
 import 'package:esteshara/widgets/custom_password_form_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -181,9 +181,11 @@ class CreateConsultantAccount extends StatelessWidget {
                             return CustomPasswordFormField(
                               title: 'Password',
                               hint: 'Please enter your password',
-                              isVisible: false,
+                              isVisible: context.read<AuthCubit>().isVisible,
                               controller: context.read<AuthCubit>().passwordController,
-                              onTap: () {},
+                              onTap: () {
+                                context.read<AuthCubit>().togglePasswordVisibility();
+                              },
                             );
                           },
                         ),
@@ -195,8 +197,10 @@ class CreateConsultantAccount extends StatelessWidget {
                             return CustomPasswordFormField(
                               title: 'Confirm Password',
                               hint: 'Please re-enter your password',
-                              isVisible: false,
-                              onTap: () {},
+                              isVisible: context.read<AuthCubit>().isVisible,
+                              onTap: () {
+                                context.read<AuthCubit>().togglePasswordVisibility();
+                              },
                               controller: context.read<AuthCubit>().passwordConfirmationController,
                             );
                           },
@@ -228,14 +232,28 @@ class CreateConsultantAccount extends StatelessWidget {
                                         ),
                                   ontap: () async {
                                     var res = await context.read<AuthCubit>().signUpWithEmail();
-                                    await context.read<AuthCubit>().createUserProfile();
                                     if (res == null) {
-                                      Navigator.popUntil(context, (route) => route.isFirst,);
-                                      Navigator.pushReplacement(
+                                      await context.read<AuthCubit>().createConsultantProfile();
+                                      Navigator.popUntil(
                                         context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const MainHub(),
-                                        ),
+                                        (route) => route.isFirst,
+                                      );
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) => CupertinoAlertDialog(
+                                            title: const Text(
+                                              'Success',
+                                              style: TextStyle(color: Colors.greenAccent, fontSize: 20),
+                                            ),
+                                            content: const Text('Account created successfully\nPlease wait for the Admin to verify it..', style: TextStyle(color: Colors.black, fontSize: 18)),
+                                            actions: [
+                                              CupertinoButton(
+                                                child: const Text('Ok'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ]),
                                       );
                                     }
                                   },

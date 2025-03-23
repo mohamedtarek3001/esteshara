@@ -1,11 +1,10 @@
+import 'package:esteshara/business_logic/auth_cubit.dart';
 import 'package:esteshara/business_logic/page_control_cubit.dart';
 import 'package:esteshara/core/constants/constants.dart';
 import 'package:esteshara/generated/assets.dart';
 import 'package:esteshara/presentation_layer/main_app/chatting_screens/ai_chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../chatting_screens/consultant_chat_screen.dart';
 
 class MainHome extends StatelessWidget {
   const MainHome({super.key});
@@ -21,25 +20,34 @@ class MainHome extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Row(
+              Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 27,
                     backgroundImage: AssetImage(Assets.imagesProfilePlaceholder),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Hi Mohamed',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xff9147BA)),
+                  BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) {
+                      return Text(
+                        context.read<AuthCubit>().userData?.name ?? '',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff9147BA),
+                        ),
+                      );
+                    },
                   ),
-                  Spacer(),
-                  Icon(
-                    Icons.notifications_none_outlined,
-                    color: Color(0xff9147BA),
-                    size: 30,
-                  )
+
+                  // Spacer(),
+                  // Icon(
+                  //   Icons.notifications_none_outlined,
+                  //   color: Color(0xff9147BA),
+                  //   size: 30,
+                  // )
                 ],
               ),
               const SizedBox(
@@ -54,98 +62,95 @@ class MainHome extends StatelessWidget {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'IT infrastructure Consulting',
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xff9147BA)),
-                                  ),
-                                  Text(
-                                    'To ensure the security and efficiency of your solutions, we assess your existing infrastructure and consult on how to effectively modify and maintain your current solutions.',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xffB4B3B3),
-                                    ),
-                                  ),
-                                ],
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'IT infrastructure Consulting',
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xff9147BA)),
                               ),
-                            ),
-                            Image.asset(
-                              Assets.imagesFirstItem,
-                              width: 90,
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Accurate analysis',
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xff9147BA)),
-                                  ),
-                                  Text(
-                                    'We conduct a deep and accurate analysis of your local and global market needs to design technology solutions that are compatible with your goals.',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xffB4B3B3),
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                'To ensure the security and efficiency of your solutions, we assess your existing infrastructure and consult on how to effectively modify and maintain your current solutions.',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xffB4B3B3),
+                                ),
                               ),
-                            ),
-                            Image.asset(
-                              Assets.imagesSecondItem,
-                              width: 90,
-                            )
-                          ],
+                            ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Solutions for technical consulting',
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xff9147BA)),
-                                  ),
-                                  Text(
-                                    'Keeping your business goals in mind, we help you choose IT solutions and technologies that will meet your needs with maximum efficiency.',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xffB4B3B3),
-                                    ),
-                                  ),
-                                ],
+                        Image.asset(
+                          Assets.imagesFirstItem,
+                          width: 90,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Accurate analysis',
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xff9147BA)),
                               ),
-                            ),
-                            Image.asset(
-                              Assets.imagesThirdItem,
-                              width: 90,
-                            )
-                          ],
+                              Text(
+                                'We conduct a deep and accurate analysis of your local and global market needs to design technology solutions that are compatible with your goals.',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xffB4B3B3),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ]
-                  ),
+                        Image.asset(
+                          Assets.imagesSecondItem,
+                          width: 90,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Solutions for technical consulting',
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xff9147BA)),
+                              ),
+                              Text(
+                                'Keeping your business goals in mind, we help you choose IT solutions and technologies that will meet your needs with maximum efficiency.',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xffB4B3B3),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Image.asset(
+                          Assets.imagesThirdItem,
+                          width: 90,
+                        )
+                      ],
+                    ),
+                  ]),
                 ),
               ),
               Row(
@@ -175,11 +180,17 @@ class MainHome extends StatelessWidget {
                       },
                     ),
                   ),
-                  const SizedBox(width: 15,),
+                  const SizedBox(
+                    width: 15,
+                  ),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AIChatScreen(),));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AIChatScreen(),
+                            ));
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,

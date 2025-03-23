@@ -88,12 +88,26 @@ class CreateAccountScreen extends StatelessWidget {
                         ),
                         BlocBuilder<AuthCubit, AuthState>(
                           builder: (context, state) {
+                            return CustomTextFormField(
+                              title: 'Name',
+                              hint: 'Please enter you Name',
+                              controller: context.read<AuthCubit>().nameController,
+                            );
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        BlocBuilder<AuthCubit, AuthState>(
+                          builder: (context, state) {
                             return CustomPasswordFormField(
                               title: 'Password',
                               hint: 'Please enter your password',
-                              isVisible: false,
+                              isVisible: context.read<AuthCubit>().isVisible,
                               controller: context.read<AuthCubit>().passwordController,
-                              onTap: () {},
+                              onTap: () {
+                                context.read<AuthCubit>().togglePasswordVisibility();
+                              },
                             );
                           },
                         ),
@@ -105,8 +119,10 @@ class CreateAccountScreen extends StatelessWidget {
                             return CustomPasswordFormField(
                               title: 'Confirm Password',
                               hint: 'Please re-enter your password',
-                              isVisible: false,
-                              onTap: () {},
+                              isVisible: context.read<AuthCubit>().isVisible,
+                              onTap: () {
+                                context.read<AuthCubit>().togglePasswordVisibility();
+                              },
                               controller: context.read<AuthCubit>().passwordConfirmationController,
                             );
                           },
@@ -135,6 +151,8 @@ class CreateAccountScreen extends StatelessWidget {
                                         ),
                                   ontap: () async {
                                     var res = await context.read<AuthCubit>().signUpWithEmail();
+                                     await context.read<AuthCubit>().createUserRecord();
+                                     await context.read<AuthCubit>().getUserRecord();
                                     if (res == null) {
                                       Navigator.popUntil(context, (route) => route.isFirst,);
                                       Navigator.pushReplacement(
